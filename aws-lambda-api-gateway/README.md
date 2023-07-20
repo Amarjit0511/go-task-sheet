@@ -57,4 +57,25 @@
     );
     ```
 
+![VSCode_Database_Connection](https://github.com/Amarjit0511/go-task-sheet/assets/54772122/90cd76a4-e163-481e-bac3-15349cf64c7d)
 
+
+#### Now that we have everything in place, we should test run the application
+1. Go to AWS Lambda console
+2. Go to the Test section
+3. In Test event section click on Create new event
+4. Down in event json, provide the following
+```
+{
+  "resource": "/send-email",
+  "path": "/send-email",
+  "httpMethod": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"name\": \"John Doe\", \"email\": \"johndoe@example.com\"}"
+}
+```
+5. Then click on "Test"
+
+![Execution_log_of_test](https://github.com/Amarjit0511/go-task-sheet/assets/54772122/6e399b2d-7417-441c-af2b-0b5cd2b5bc81)
