@@ -30,4 +30,3 @@ source ~/.bashrc
 go version
 ```
 
-
