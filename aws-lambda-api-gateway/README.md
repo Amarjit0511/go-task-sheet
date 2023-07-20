@@ -101,6 +101,29 @@ Now after we zip the file, it is this file that we will upload as Lambda Functio
   "body": "{\"name\": \"John Doe\", \"email\": \"johndoe@example.com\"}"
 }
 ```
+This can also be left black as:
+```
+{
+}
+```
 5. Then click on "Test"
 
 ![Execution_log_of_test](https://github.com/Amarjit0511/go-task-sheet/assets/54772122/6e399b2d-7417-441c-af2b-0b5cd2b5bc81)
+
+# Setting the API gateway:
+1. Go to the AWS Lambda Console.
+2. Click on the function created.
+3. In the Function overview click on Add trigger, then in the Trigger configuration select <b>API Gateway</b>
+4. Select <b>Create a new API</b>
+5. In the API type select REST API
+6. Then under security, for static authentication method, we will select either IAM or API Key
+7. Then under Additional settings, give the API name.
+8. Click on <b>Add</b>
+9. Hence an API Gateway trigger has successfully been set.
+10. Now in the AWS Lambda console after clicking on the created function we can go to the Configuration tab and then click on Triggers.
+11. Then on the API Gateway created, click on details to get the API key (static authentication method).
+12. For testing purpose, now if we go to POSTMAN, we will have to add this in Authorization.
+API Key: X-Api-Key
+Then in value paste the value: 
+
+
