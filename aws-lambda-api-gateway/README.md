@@ -45,6 +45,16 @@
 11. In the host section enter the endpoint on the RDS database created
 12. In username enter the master username that we set during RDS Databse creation.
 13. In password enter the master password.
-14. We can also select the database name (optional).
+14. We can also select the database name (optional), since my DB_NAME was sendgriddbtest, i entered the same.
 15. Finally click on <b>"Connect"</b>
+16. Now for saving the response in the database, we are required to create a table named sendgrid_response.
+    ```
+    CREATE TABLE sendgrid_response (
+    id SERIAL PRIMARY KEY,
+    status_code INTEGER,
+    body TEXT,
+    headers JSONB
+    );
+    ```
+
 
