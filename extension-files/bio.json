@@ -1,0 +1,42 @@
+{
+	"name" : "Amarjit Kumar",
+	"age" : 23,
+	"hometown" : "Dumka",
+	"intro" : "Hi\n This is Amarjit\n Glad to meet you",
+	"hobbies" : [
+		"listening to music",
+		"cycling"
+	],
+	"tasks" : {
+		"week_1" : "done",
+		"week_2" : "done",
+		"week_3" : "done",
+		"week_4" : "ongoing"
+	},
+	"task" : [
+		{
+			"week_1" : {
+				"ontime" : "yes",
+				"review_completed" : "yes"
+			}
+		},
+		{
+			"week_2" : {
+				"ontime" : "yes",
+				"review_complted" : "yes"
+			}
+		},
+		{
+			"week_3" : {
+				"ontime" : "yes",
+				"review_completed" : "yes"
+			}
+		},
+		{
+			"week_4" : {
+				"ontime" : "yes",
+				"review_completed" : "no"
+			}
+		}
+	]
+}
