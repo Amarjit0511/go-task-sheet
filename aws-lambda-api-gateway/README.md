@@ -1,4 +1,7 @@
 # Implementation of sending email through sendgrid using AWS Lambda and API Gateway
+# Zipping the code for Lambda:
+
+
 # Setting up Lambda:
 1. Go to the AWS Console
 2. In services select Lambda
@@ -16,10 +19,8 @@
 
 7. After the function is created, click on the function created, then under the Code section, in Code source, upload the zip file that we created.
 8. In the Runtime settings, click on Edit runtime management configuration and set the Handler as <b>main</b>
-
-
-
-
+9. Now in the Configuration tab, we are required to set the environment variable:
+- Set the following: DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER and SENDGRID_API_KEY
 
 
 
