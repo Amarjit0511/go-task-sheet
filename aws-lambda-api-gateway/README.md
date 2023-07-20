@@ -28,3 +28,23 @@
 15. Futher we will options for Encryption, backup, retention period, we can select all those according to the needs.
 16. <b> Finally click on</b> : "Create database"
 
+<b> Wait for a few minutes for it to set up until the status shows as "Available"</b>
+
+#### After the status of the database is Available, we also want to connect it to Database client locally.
+##### To connect to database client locally:
+1. Click on the database created in the AWS RDS console
+2. In under connectivity & security tab, we will see "Endpoint", for connecting to Database client that is our DB_HOST
+3. The port number shown is our DB_PORT
+4. Down under Security group rules, click on the inbound type security group and wait for it to open, then under Inbound rules, click on "Edit inbound rules"
+5. Then click on Add rule and select source type as "PostgreSQL" and select source as Any IPv4. This will allow Database client on local machine to make a connection request to the RDS service on AWS.
+6. Then under Manage IAM roles select the IAM role we created for this purpose of giving access of RDS to Lambda
+7. Then on features, choose a feature to add, here in our case it is Lambda.
+8. Now start the VS Code and download a database client, in my case I downloaded an extension named "Database Client".
+9. Click on the extension and the click on "Create Connection".
+10. In server type select PostgresSQL.
+11. In the host section enter the endpoint on the RDS database created
+12. In username enter the master username that we set during RDS Databse creation.
+13. In password enter the master password.
+14. We can also select the database name (optional).
+15. Finally click on <b>"Connect"</b>
+
