@@ -1,4 +1,21 @@
 # Implementation of sending email through sendgrid using AWS Lambda and API Gateway
+# Setting up Lambda:
+1. Go to the AWS Console
+2. In services select Lambda
+3. Click on Create Function
+4. Select "Author from scratch"
+5. Under Basic information
+- Give a Function name
+- Set the Runtime environment as Go 1.x
+- In architecture set x86_64
+- Under Persissions tab, and under Execution role, select <b>Use an existing role</b>
+- From under the list of IAM Roles, select the IAM role that we created for giving Lambda the access of RDS.
+6. Click on <b>Create function</b>
+
+<b>Wait for the function to be created</b>
+
+7. After the function is created, click on the function created, then under the Code section, in Code source, upload the zip file that we created.
+8. In the Runtime settings, click on Edit runtime management configuration and set the Handler as <b>main</b>
 
 
 
