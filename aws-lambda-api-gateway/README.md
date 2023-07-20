@@ -1,6 +1,13 @@
 # Implementation of sending email through sendgrid using AWS Lambda and API Gateway
 # Zipping the code for Lambda:
-
+1. Go to the code file and open the folder location in the integrated terminal
+```
+GOOS=linux GOARCH=amd64 go build main.go
+```
+```
+zip myFunction.zip main
+```
+Now after we zip the file, it is this file that we will upload as Lambda Function
 
 # Setting up Lambda:
 1. Go to the AWS Console
