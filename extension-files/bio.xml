@@ -1,0 +1,59 @@
+<bio>
+
+	<name>Amarjit Kumar</name>
+	<age>23</age>
+	<hometown>Dumka</hometown>
+
+	<intro> Hi
+		This is Amarjit 
+		Glad to meet you
+	</intro>
+
+	<hobbbies>
+		<item>Listening to music</item>
+		<item>Cycling</item>
+	</hobbbies>
+
+	<tasks>
+		<week_1>Done</week_1>
+		<week_2>Done</week_2>
+		<week_3>Done</week_3>
+		<week_4>Ongoing</week_4>
+	</tasks>
+
+	<task>
+		<item>
+			<week_1>
+				<ontime>yes</ontime>
+				<review_completed>yes</review_completed>
+			</week_1>
+		</item>
+
+		<item>
+			<week_2>
+				<ontime>yes</ontime>
+				<review_completed>yes</review_completed>
+			</week_2>
+		</item>
+
+		<item>
+			<week_3>
+				<ontime>yes</ontime>
+				<review_completed>yes</review_completed>
+			</week_3>
+		</item>
+
+		<item>
+			<week_4>
+				<ontime>yes</ontime>
+				<review_completed>no</review_completed>
+			</week_4>
+		</item>
+	</task>
+</bio>
+
+
+
+
+
+</bio>

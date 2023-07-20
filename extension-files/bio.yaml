@@ -1,0 +1,38 @@
+# Key Value pairs 
+name : "Amarjit Kumar"
+age : 23
+hometown : Dumka
+
+# Multi-line comments
+intro : |
+  Hi
+  This is Amarjit
+  Gald to meet you 
+
+# List
+hobbies :
+  - "listening to music"
+  - "cycling"
+
+# Objects
+tasks :
+  week_1 : Done 
+  week_2 : Done 
+  week_3 : Done 
+  week_4 : Ongoing
+
+# List of objects
+task :
+  - week_1 :
+    ontime : yes
+    review_completed : yes 
+  - week_2 : 
+    ontime : yes 
+    review_completed : yes 
+  - week_3 :
+    ontime : yes 
+    review_completed : yes
+  - week_4 :
+    ontime : yes 
+    review_completed : no 
+    
