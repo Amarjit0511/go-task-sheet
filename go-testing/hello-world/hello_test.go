@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func HelloWorldTest(t *testing.T) {
+func TestHelloWorld(t *testing.T) {
 	expected := "Hello World"
 	got := HelloWorld()
 
