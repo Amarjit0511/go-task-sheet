@@ -124,7 +124,7 @@ This can also be left black as:
 11. Then on the API Gateway created, click on details to get the API key (static authentication method).
 12. For testing this, we can go to POSTMAN
 
-# Testing the Gateway API on POSTMAN:
+# Testing the Gateway API on POSTMAN:-
 1. On the trigger section in Configuration tab in Lambda Console, the list of triggers will be there, copy the API endpoint of the API Gateway that is to be tested and paste it in URL section.
 2. In the Authorization section, select type as API Key and enter the Key and Value, the Key will be X-Api-Key and the Value will be the one pasted from the details section of the trigger.
    
