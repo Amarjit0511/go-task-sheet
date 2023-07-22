@@ -1,3 +1,3 @@
-module goolang
+module email-validation
 
 go 1.20
