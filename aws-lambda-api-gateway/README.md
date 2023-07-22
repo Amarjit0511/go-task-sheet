@@ -1,3 +1,19 @@
+# Why Serverless Computing:
+1. No server management - handled by AWS
+2. Flexible Scaling
+3. Pay for value i.e. only pay for successfull execution
+4. Automated high availability
+# What are microservice architecture?
+It is a software development architecture where software is composed of small and independent services that communicate over well defined APIs. These individual services are owned by small teams. Microservices architecture makes the software applixcation easier to scale and faster to develop.
+# Why API Gateway? 
+- It provides an easy interface for code running on AWS Lambda.
+- Also since most software development organisations are moving to microservices architecture, API gateway is a vey handy thing as developers can add headers and map inputs variables from POST events to something that a target application needs.
+- Efficient API Development : We can run multiple versions of the same API simultaneously with API gateway allowing to quickly test and release new versions.
+- Easy monitoring
+- Performance: The end users face the lowest posible latency for end requests and resposes by taking advantage of global network of edge locations using Amazon CloudFront.
+- Throttling traffic and storing otput of API calls into cache is also an added advantage.
+- We are billed only for the API requests that we make depending on the region.
+
 # Implementation of sending email through sendgrid using AWS Lambda and API Gateway
 # Zipping the code for Lambda:
 1. Go to the code file and open the folder location in the integrated terminal
@@ -9,7 +25,7 @@ zip myFunction.zip main
 ```
 Now after we zip the file, it is this file that we will upload as Lambda Function
 
-# Setting up Lambda:
+# Setting up Lambda(Serverless Compute Service):
 1. Go to the AWS Console
 2. In services select Lambda
 3. Click on Create Function
@@ -110,7 +126,7 @@ This can also be left black as:
 
 ![Execution_log_of_test](https://github.com/Amarjit0511/go-task-sheet/assets/54772122/6e399b2d-7417-441c-af2b-0b5cd2b5bc81)
 
-# Setting the API gateway:
+# Setting the API gateway (Front Door):
 1. Go to the AWS Lambda Console.
 2. Click on the function created.
 3. In the Function overview click on Add trigger, then in the Trigger configuration select <b>API Gateway</b>
