@@ -7,9 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Using viper package to read .env file/files
-// The aim is to return the value of the key
-
+// Using viper package to read the env file
 func viperTomlVariable(key string) string {
 	// SetConfigFile explicitly defines the path, name and extension of the config file
 	// viper will use this and not check any of the config paths
