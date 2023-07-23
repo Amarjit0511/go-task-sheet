@@ -1,0 +1,9 @@
+{
+    "from_name": "Sender Name",
+    "from_email": "amarjitkrxs@gmail.com",
+    "to_name": "Recipient Name",
+    "to_email": "amarjitkr0511@gmail.com",
+    "subject": "Email Subject",
+    "plain_text_content": "Plain text content of the email",
+    "html_content": "<strong>HTML content of the email</strong>"
+  }
