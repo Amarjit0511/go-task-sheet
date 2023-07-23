@@ -1,15 +1,41 @@
-//JWT
 package main
 
 import (
 	"net/http"
 	"time"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/joho/godotenv"
 )
 
-var secretKey = []byte("your_secret_key") // Replace this with a secure secret key for production use.
+var key []byte
+
+func main() {
+	// Loading the config.env file
+	err := godotenv.Load("config.env")
+	if err != nil {
+		panic("Error loading .env file")
+	}
+
+	key = []byte(getEnv("SECRET_KEY", ""))
+
+	r := gin.Default()
+
+	r.POST("/register", register)
+	r.POST("/login", login)
+	r.GET("/protected", authMiddleware(), protected)
+
+	r.Run(":8080")
+}
+
+func getEnv(key, defaultValue string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return defaultValue
+}
 
 type User struct {
 	Username string `json:"username"`
@@ -21,72 +47,50 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// In-memory user storage
 var users = map[string]User{
 	"user1": User{Username: "user1", Password: "password1"},
 	"user2": User{Username: "user2", Password: "password2"},
-	// Add more users as needed.
-}
-
-func main() {
-	r := gin.Default()
-
-	// User registration endpoint
-	r.POST("/register", register)
-
-	// User login endpoint
-	r.POST("/login", login)
-
-	// Protected route example
-	r.GET("/protected", authMiddleware(), protected)
-
-	r.Run(":8080")
 }
 
 func register(c *gin.Context) {
-	var user User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	var u User
+	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
 
-	// Check if the username already exists
-	if _, exists := users[user.Username]; exists {
+	if _, exists := users[u.Username]; exists {
 		c.JSON(http.StatusConflict, gin.H{"error": "Username already exists"})
 		return
 	}
 
-	// Replace this with proper password hashing in production.
-	users[user.Username] = User{
-		Username: user.Username,
-		Password: user.Password,
+	users[u.Username] = User{
+		Username: u.Username,
+		Password: u.Password,
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
+	c.JSON(http.StatusCreated, gin.H{"message": "Registration Successfull"})
 }
 
 func login(c *gin.Context) {
-	var user User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	var u User
+	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
 
-	// Check if the username exists in the user map.
-	storedUser, exists := users[user.Username]
+	sUser, exists := users[u.Username]
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
-	// Replace this with proper password hashing and comparison in production.
-	if user.Password != storedUser.Password {
+	if u.Password != sUser.Password {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
-	// For a successful login, generate a JWT token and send it in the response.
-	token, err := generateToken(user.Username)
+	token, err := generateToken(u.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
@@ -96,34 +100,34 @@ func login(c *gin.Context) {
 }
 
 func generateToken(username string) (string, error) {
-	expirationTime := time.Now().Add(15 * time.Minute) // Token will be valid for 15 minutes
+	expTime := time.Now().Add(15 * time.Minute)
 	claims := &Claims{
 		Username: username,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
+			ExpiresAt: expTime.Unix(),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(secretKey)
+	tokenStr, err := token.SignedString(key)
 	if err != nil {
 		return "", err
 	}
 
-	return tokenString, nil
+	return tokenStr, nil
 }
 
 func authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.GetHeader("Authorization")
-		if tokenString == "" {
+		tStr := c.GetHeader("Authorization")
+		if tStr == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token required"})
 			c.Abort()
 			return
 		}
 
-		token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-			return secretKey, nil
+		token, err := jwt.ParseWithClaims(tStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+			return key, nil
 		})
 
 		if err != nil {
@@ -143,8 +147,7 @@ func authMiddleware() gin.HandlerFunc {
 }
 
 func protected(c *gin.Context) {
-	// Extract the username from the context.
 	username, _ := c.Get("username")
 
-	c.JSON(http.StatusOK, gin.H{"message": "Hello, " + username.(string) + "! This is a protected route."})
+	c.JSON(http.StatusOK, gin.H{"message": "Hello, " + username.(string) + "! Successfully implemented JWT from task"})
 }
