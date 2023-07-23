@@ -26,3 +26,5 @@ You will see something like:
 ![Screenshot 2023-07-23 at 9 00 10 PM](https://github.com/Amarjit0511/go-task-sheet/assets/54772122/d7a2484a-a1e0-4da2-9e8a-337941ae4ce8)
 Note the response header: it should be something like <b> Access-Control-Allow-Origin:* </b>
 
+![Screenshot 2023-07-23 at 9 50 12 PM](https://github.com/Amarjit0511/go-task-sheet/assets/54772122/b391ac80-ae9a-4c0b-84fa-37ecf2d42436)
+
