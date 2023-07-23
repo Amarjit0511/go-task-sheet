@@ -28,5 +28,5 @@ func tomlEnvVariable(key string) string {
 
 func main() {
 	toml := tomlEnvVariable("name")
-	fmt.Printf("viper ; %s = %s \n", "name", toml)
+	fmt.Printf("%s\n", toml)
 }
