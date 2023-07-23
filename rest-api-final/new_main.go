@@ -7,12 +7,12 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq" // PostgreSQL driver
+	_ "github.com/lib/pq"
 	"github.com/joho/godotenv"
 	
 )
 
-// album represents data about a record album.
+// Data structure for songs albums
 type album struct {
 	ID     string  `json:"id"`
 	Title  string  `json:"title"`
@@ -23,16 +23,16 @@ type album struct {
 var db *sql.DB
 
 func main() {
-	// Load the environment variables from config.env file.
+	// Loading the environment variable from config.env
 	err := godotenv.Load("config.env")
 	if err != nil {
 		log.Fatalf("Error loading environment variables: %v", err)
 	}
 
-	// Get the database connection string from the environment variable.
+	// Getting the database connection string from the env file
 	dbConnectionString := os.Getenv("DB_CONNECTION_STRING")
 
-	// Open the database connection using the provided connection string.
+	// Starting the database connection using the obtained connection string
 	db, err = sql.Open("postgres", dbConnectionString)
 	if err != nil {
 		log.Fatalf("Error opening database connection: %v", err)
@@ -40,151 +40,117 @@ func main() {
 	defer db.Close()
 
 	router := gin.Default()
-	router.GET("/albums", getAlbums)
-	router.GET("/albums/:id", getAlbumByID)
-	router.POST("/albums", postAlbums)
-	router.PUT("/albums/:id", putAlbumByID)
-	router.PATCH("/albums/:id", patchAlbumByID)
-	router.DELETE("/albums/:id", deleteAlbumByID)
+	router.GET("/albums/get", getAlbums)
+	router.GET("/albums/get/:id", getAlbumByID)
+	router.POST("/albums/post", postAlbums)
+	router.PUT("/albums/put/:id", putAlbumByID)
+	router.DELETE("/albums/delete/:id", deleteAlbumByID)
 
 	router.Run("localhost:8082")
 }
 
-// getAlbums responds with the list of all albums from the database as JSON.
+// This will return all the albums from the pg database
 func getAlbums(c *gin.Context) {
 	albums := fetchAlbumsFromDatabase()
 	c.IndentedJSON(http.StatusOK, albums)
 }
 
-// postAlbums adds an album from JSON received in the request body to the database.
+// This will add an album to the pg database
 func postAlbums(c *gin.Context) {
 	var newAlbum album
 
-	// Call BindJSON to bind the received JSON to newAlbum.
+	// Binding the received json to newAlbum for structure validation
 	if err := c.BindJSON(&newAlbum); err != nil {
 		log.Printf("Error binding JSON for new album: %v", err)
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid data"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"Sorry": "invalid data"})
 		return
 	}
 
-	// Insert the new album into the database.
+	// Finally inserting the new album in the database
 	if err := insertAlbumIntoDatabase(newAlbum); err != nil {
 		log.Printf("Error inserting new album into database: %v", err)
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"Sorry": "internal server error"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusCreated, newAlbum)
 }
 
-// getAlbumByID locates the album whose ID value matches the id
-// parameter sent by the client, then returns that album as a response.
+// Getting albums by id value
 func getAlbumByID(c *gin.Context) {
 	id := c.Param("id")
 
-	// Fetch the album from the database.
+	// Getting the album from the database for a particular id
 	a, err := fetchAlbumFromDatabase(id)
 	if err == sql.ErrNoRows {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"Sorry": "album not found"})
 		return
 	} else if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"Sorry": "internal server error"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusOK, a)
 }
 
-// putAlbumByID updates an album from JSON received in the request body.
+// Putting an album by id
 func putAlbumByID(c *gin.Context) {
 	id := c.Param("id")
 	var updatedAlbum album
 
-	// Call BindJSON to bind the received JSON to updatedAlbum.
+	// Binding the JSON received in the request with the actually defined struct
 	if err := c.BindJSON(&updatedAlbum); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid data"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"Sorry": "invalid data"})
 		return
 	}
 
-	// Check if the album with the given ID exists.
+	// First checking if the album with the given ID exists or not
 	_, err := fetchAlbumFromDatabase(id)
 	if err == sql.ErrNoRows {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"Sorry": "album not found"})
 		return
 	} else if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"Sorry": "internal server error"})
 		return
 	}
 
-	// Update the album in the database.
+	// If everything is right, updating the album in the database
 	if err := updateAlbumInDatabase(updatedAlbum); err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"Sorry": "internal server error"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusOK, updatedAlbum)
 }
 
-// patchAlbumByID partially updates an album from JSON received in the request body.
-func patchAlbumByID(c *gin.Context) {
-	id := c.Param("id")
-	var updatedAlbum album
-
-	// Call BindJSON to bind the received JSON to updatedAlbum.
-	if err := c.BindJSON(&updatedAlbum); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid data"})
-		return
-	}
-
-	// Check if the album with the given ID exists.
-	_, err := fetchAlbumFromDatabase(id)
-	if err == sql.ErrNoRows {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
-		return
-	} else if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
-		return
-	}
-
-	// Update the album in the database.
-	if err := updateAlbumFieldsInDatabase(updatedAlbum, id); err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, updatedAlbum)
-}
-
-// deleteAlbumByID deletes an album whose ID value matches the id
-// parameter sent by the client.
+//Deleting album by id
 func deleteAlbumByID(c *gin.Context) {
 	id := c.Param("id")
 
-	// Check if the album with the given ID exists.
+	// Checking if the album with a particular id exists or not
 	_, err := fetchAlbumFromDatabase(id)
 	if err == sql.ErrNoRows {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"Sorry": "album not found"})
 		return
 	} else if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"Sorry": "internal server error"})
 		return
 	}
 
-	// Delete the album from the database.
+	// If found in the database, deleting it
 	if err := deleteAlbumFromDatabase(id); err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"Sorry": "internal server error"})
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "album deleted"})
+	c.IndentedJSON(http.StatusOK, gin.H{"Successfull": "album deleted"})
 }
 
-// Helper functions for database interactions
-
+// Functions for interacting with the database
 func fetchAlbumsFromDatabase() []album {
 	rows, err := db.Query("SELECT * FROM albums")
 	if err != nil {
-		log.Fatalf("Error querying albums from database: %v", err)
+		log.Fatalf("Error finding albums in database: %v", err)
 	}
 	defer rows.Close()
 
@@ -193,7 +159,7 @@ func fetchAlbumsFromDatabase() []album {
 		var a album
 		err := rows.Scan(&a.ID, &a.Title, &a.Artist, &a.Price)
 		if err != nil {
-			log.Fatalf("Error scanning row: %v", err)
+			log.Fatalf("Error searching row: %v", err)
 		}
 		albums = append(albums, a)
 	}
@@ -205,7 +171,7 @@ func fetchAlbumFromDatabase(id string) (album, error) {
 	var a album
 	err := db.QueryRow("SELECT * FROM albums WHERE id=$1", id).Scan(&a.ID, &a.Title, &a.Artist, &a.Price)
 	if err != nil {
-		log.Printf("Error fetching album with ID %s from database: %v", id, err)
+		log.Printf("Error finding album with ID %s in database: %v", id, err)
 		return album{}, err
 	}
 	return a, nil
@@ -214,7 +180,7 @@ func fetchAlbumFromDatabase(id string) (album, error) {
 func insertAlbumIntoDatabase(a album) error {
 	_, err := db.Exec("INSERT INTO albums (id, title, artist, price) VALUES ($1, $2, $3, $4)", a.ID, a.Title, a.Artist, a.Price)
 	if err != nil {
-		log.Printf("Error inserting album into database: %v", err)
+		log.Printf("Error inserting album into the database: %v", err)
 	}
 	return err
 }
@@ -222,45 +188,16 @@ func insertAlbumIntoDatabase(a album) error {
 func updateAlbumInDatabase(a album) error {
 	_, err := db.Exec("UPDATE albums SET title=$1, artist=$2, price=$3 WHERE id=$4", a.Title, a.Artist, a.Price, a.ID)
 	if err != nil {
-		log.Printf("Error updating album in database: %v", err)
+		log.Printf("Error updating album in the database: %v", err)
 	}
 	return err
 }
 
-func updateAlbumFieldsInDatabase(a album, id string) error {
-	query := "UPDATE albums SET"
-	params := []interface{}{}
-
-	if a.Title != "" {
-		query += " title=$1,"
-		params = append(params, a.Title)
-	}
-	if a.Artist != "" {
-		query += " artist=$2,"
-		params = append(params, a.Artist)
-	}
-	if a.Price != 0 {
-		query += " price=$3,"
-		params = append(params, a.Price)
-	}
-
-	// Remove the trailing comma from the query.
-	query = query[:len(query)-1]
-
-	query += " WHERE id=$4"
-	params = append(params, id)
-
-	_, err := db.Exec(query, params...)
-	if err != nil {
-		log.Printf("Error updating album fields in database: %v", err)
-	}
-	return err
-}
 
 func deleteAlbumFromDatabase(id string) error {
 	_, err := db.Exec("DELETE FROM albums WHERE id=$1", id)
 	if err != nil {
-		log.Printf("Error deleting album from database: %v", err)
+		log.Printf("Error deleting album from the database: %v", err)
 	}
 	return err
 }
