@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -108,7 +109,7 @@ func sendEmailHandler(c *gin.Context) {
 	if response.StatusCode >= 200 && response.StatusCode < 300 {
 		// Extracting different data from the response
 		statusCode := response.StatusCode
-		responseBody := emailContent.PlainTextContent
+		responseBody := response.Body
 		headers := response.Headers
 
 		// Starting the DB connection
@@ -128,7 +129,7 @@ func sendEmailHandler(c *gin.Context) {
 
 		c.String(http.StatusOK, "Email sent successfully to the recipient!")
 	} else {
-		c.JSON(http.StatusInternalServerError, gin.H{"Sorry": "Error sending email, please recheck the code"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Sorry": "Error sending email, please recheck the email"})
 	}
 }
 
@@ -144,6 +145,12 @@ func main() {
 	}
 
 	r := gin.Default()
+	// Enable CORS for all routes
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	r.Use(cors.New(config))
+
 	r.POST("/send-email", sendEmailHandler)
 
 	port := ":8080"
