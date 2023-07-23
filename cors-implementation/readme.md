@@ -1,3 +1,6 @@
+# What is CORS?
+CORS is a security feature implemented by web browsers to restrict cross-origin requests by default. This is done to prevent unauthorized access to resources and protect user data. CORS is a set of HTTP headers and mechanisms that allow servers to indicate which domains are allowed to make cross-origin requests and which types of requests are permitted.
+
 # CORS in action:
 After running the code files:
 1. Go to a any Directory, be it Downloads, Desktop, or any other directory.
@@ -27,4 +30,16 @@ You will see something like:
 Note the response header: it should be something like <b> Access-Control-Allow-Origin:* </b>
 
 ![Screenshot 2023-07-23 at 9 50 12 PM](https://github.com/Amarjit0511/go-task-sheet/assets/54772122/b391ac80-ae9a-4c0b-84fa-37ecf2d42436)
+
+
+# Working:
+This CORS allows web application running on one domain to make requests to GO server running on another domain. Without CORS today's modern web browsers normally restricts these types of cross-origin requests for security reasons.
+
+1. Our Go server is running on localhost:8443 and is handling endpoints for GET, POST, PUT, DELETE.
+2. Now we also have a simple web app that is running on port 8000.
+3. In my Go code, I have enabled CORS on all endpoints and set it to allow all origins(AllowAllOrigins=true) thereby allowing any domain to access the server's resources. Any doamin can now fetch the data from the server, etc.
+4. On clicking the fetch button on the web application, the fetchAlbums() is triggered.
+5. Inside the fetchAlbum() a cross origin request is made using fetch() functionwhich points to localhost:8443/albums/get
+6. In the VS Code images above an OPTION request might be visible. It is basically a preflight request that takes before any request to the GO server cnfirming if the server allows this request.
+7. Hence after all this GET or other request can be made.
 
