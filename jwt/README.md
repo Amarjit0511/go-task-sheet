@@ -5,6 +5,6 @@
 4. **SSO**: Can also be used as Single sign on service - accessing multiple applications using a single sign on.
 5. **Expiration and revocation/blacklisting.**
 6. JWTs are **compact**.
-7. Also since we have the feature of **claims**(way to transmit the information about the user and permissino), this can be used to give strict role based permissions.
+7. Also since we have the feature of **claims**(information contained in token's payload), this can be used to give strict role based permissions.
    
 Finally we can say that, JWTs provide a secure, efficient, and flexible way to implement authentication and authorization mechanisms in modern web applications and APIs. But, it is essential to use JWTs properly, including handling token expiration and revocation, keeping the secret key secure, and carefully considering the token payload to avoid including sensitive information.
