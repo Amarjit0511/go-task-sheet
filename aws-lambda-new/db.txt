@@ -1,0 +1,6 @@
+CREATE TABLE sendgrid_response (
+    id SERIAL PRIMARY KEY,
+    status_code INTEGER,
+    body TEXT,
+    headers TEXT
+);
